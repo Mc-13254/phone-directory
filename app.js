@@ -636,172 +636,228 @@
 //       }
 //     }
 //   });
- let editRow = null; // Track the row being edited
+let editRow = null; // Keep track of the row being edited
 
-    // Fetch services for the dropdown
-    function fetchServices() {
-      fetch("http://localhost/dashboard/phone-directory/service.php")
-        .then((response) => response.json())
-        .then((data) => {
-          const serviceSelect = document.getElementById("service");
-          serviceSelect.innerHTML = '<option value="">Select a service</option>';
-          data.forEach((service) => {
-            const option = document.createElement("option");
-            option.value = service.name;
-            option.textContent = service.name;
-            serviceSelect.appendChild(option);
-          });
-        })
-        .catch((error) => console.error("Error fetching services:", error));
-    }
+// Event listener for form submission
+document.getElementById("contactForm").addEventListener("submit", function (e) {
+  e.preventDefault();
 
-    // Fetch and display data
-    function fetchData() {
-      fetch("http://localhost/dashboard/phone-directory/api.php")
-        .then((response) => response.json())
-        .then((data) => {
-          const tableBody = document.getElementById("contactsTableBody");
-          tableBody.innerHTML = "";
-          data.forEach((row) => {
-            const { id, service, names, phone_numbers } = row;
+  const service = document.getElementById("service").value;
+  const names = [];
+  const phoneNumbers = [];
 
-            const newRow = document.createElement("tr");
-            newRow.dataset.id = id;
-            newRow.innerHTML = `
-              <td>${service}</td>
-              <td>${names.join(", ")}</td>
-              <td>${phone_numbers.join(", ")}</td>
-              <td>
-                <button class="editBtn">Edit</button>
-                <button class="deleteBtn">Delete</button>
-              </td>
-            `;
-            tableBody.appendChild(newRow);
-          });
-        })
-        .catch((error) => console.error("Error fetching data:", error));
-    }
+  const nameInputs = document.querySelectorAll("#namePhoneContainer input[name='name']");
+  const phoneInputs = document.querySelectorAll("#namePhoneContainer input[name='phone']");
 
-    // Add new data
-    async function addNewData(service, names, phoneNumbers) {
-      try {
-        const response = await fetch("http://localhost/dashboard/phone-directory/api.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ service, names, phone_numbers: phoneNumbers }),
-        });
+  nameInputs.forEach((input) => names.push(input.value));
+  phoneInputs.forEach((input) => phoneNumbers.push(input.value));
+
+  // Check for empty fields
+  if (
+    !service ||
+    names.some((name) => name === "") ||
+    phoneNumbers.some((phone) => phone === "")
+  ) {
+    alert("Please fill in all fields.");
+    return;
+  }
+
+  if (editRow) {
+    // Update existing row
+    const id = editRow.dataset.id;
+    updateDatabase(id, service, names, phoneNumbers)
+      .then((response) => {
         if (response.ok) {
-          fetchData();
-          clearForm();
-        } else {
-          const error = await response.json();
-          alert(error.message || "Failed to add data.");
-        }
-      } catch (error) {
-        console.error("Error adding data:", error);
-      }
-    }
-
-    // Update data
-    async function updateDatabase(id, service, names, phoneNumbers) {
-      try {
-        const response = await fetch(`http://localhost/dashboard/phone-directory/api.php/${id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ service, names, phone_numbers: phoneNumbers }),
-        });
-        if (response.ok) {
-          fetchData();
+          editRow.querySelector("td:first-child").textContent = service;
+          editRow.querySelector("td:nth-child(2)").textContent = names.join(", ");
+          editRow.querySelector("td:nth-child(3)").textContent = phoneNumbers.join(", ");
           clearForm();
           editRow = null;
         } else {
-          const error = await response.json();
-          alert(error.message || "Failed to update data.");
+          console.error("Error updating row:", response.statusText);
         }
-      } catch (error) {
-        console.error("Error updating data:", error);
-      }
-    }
-
-    // Delete data
-    async function handleDelete(id) {
-      try {
-        const response = await fetch(`http://localhost/dashboard/phone-directory/api.php/${id}`, {
-          method: "DELETE",
-        });
+      })
+      .catch((error) => console.error("Error updating database:", error));
+  } else {
+    // Add new data
+    addNewData(service, names, phoneNumbers)
+      .then((response) => {
         if (response.ok) {
           fetchData();
-          alert("Record deleted successfully.");
+          clearForm();
         } else {
-          alert("Failed to delete record.");
+          console.error("Error adding new data:", response.statusText);
         }
-      } catch (error) {
-        console.error("Error deleting record:", error);
-      }
+      })
+      .catch((error) => console.error("Error adding new data:", error));
+  }
+});
+
+// Function to clear the form fields
+function clearForm() {
+  document.getElementById("service").value = "";
+  document.getElementById("namePhoneContainer").innerHTML = "";
+  addNamePhoneInput();
+}
+
+// Function to add new name and phone input fields
+function addNamePhoneInput() {
+  const container = document.getElementById("namePhoneContainer");
+  const newDiv = document.createElement("div");
+
+  const nameInput = document.createElement("input");
+  nameInput.type = "text";
+  nameInput.name = "name";
+  nameInput.placeholder = "Name";
+
+  const phoneInput = document.createElement("input");
+  phoneInput.type = "text";
+  phoneInput.name = "phone";
+  phoneInput.placeholder = "Phone Number";
+
+  newDiv.appendChild(nameInput);
+  newDiv.appendChild(phoneInput);
+  newDiv.style.display = "block";
+  container.appendChild(newDiv);
+}
+
+// Function to handle editing and deleting rows
+document.addEventListener("click", function (e) {
+  if (e.target) {
+    if (e.target.classList.contains("editBtn")) {
+      const row = e.target.closest("tr");
+      editRow = row;
+
+      const serviceCell = row.querySelector("td:first-child");
+      const nameCell = row.querySelector("td:nth-child(2)");
+      const phoneCell = row.querySelector("td:nth-child(3)");
+
+      document.getElementById("service").value = serviceCell.textContent;
+      clearForm();
+
+      const nameInputs = nameCell.textContent.split(", ");
+      const phoneInputs = phoneCell.textContent.split(", ");
+
+      nameInputs.forEach((name, index) => {
+        addNamePhoneInput();
+        document.querySelectorAll("#namePhoneContainer input[name='name']")[index].value = name;
+        document.querySelectorAll("#namePhoneContainer input[name='phone']")[index].value = phoneInputs[index] || "";
+      });
     }
 
-    // Clear form fields
-    function clearForm() {
-      document.getElementById("service").value = "";
-      document.getElementById("namePhoneContainer").innerHTML = "";
-      addNamePhoneInput();
-    }
+    if (e.target.classList.contains("deleteBtn")) {
+      const row = e.target.closest("tr");
+      const id = row.dataset.id;
 
-    // Add name & phone inputs
-    function addNamePhoneInput() {
-      const container = document.getElementById("namePhoneContainer");
-      const newDiv = document.createElement("div");
-      newDiv.innerHTML = `
-        <input type="text" name="name" placeholder="Name" required>
-        <input type="text" name="phone" placeholder="Phone Number" required>
-      `;
-      container.appendChild(newDiv);
-    }
-
-    // Handle form submission
-    document.getElementById("contactForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const service = document.getElementById("service").value;
-      const names = Array.from(document.querySelectorAll("input[name='name']")).map(input => input.value);
-      const phoneNumbers = Array.from(document.querySelectorAll("input[name='phone']")).map(input => input.value);
-
-      if (!service || names.includes("") || phoneNumbers.includes("")) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      if (editRow) {
-        const id = editRow.dataset.id;
-        updateDatabase(id, service, names, phoneNumbers);
-      } else {
-        addNewData(service, names, phoneNumbers);
-      }
-    });
-
-    // Handle edit and delete button clicks
-    document.addEventListener("click", function (e) {
-      if (e.target.classList.contains("editBtn")) {
-        const row = e.target.closest("tr");
-        editRow = row;
-        const service = row.querySelector("td:first-child").textContent;
-        const names = row.querySelector("td:nth-child(2)").textContent.split(", ");
-        const phoneNumbers = row.querySelector("td:nth-child(3)").textContent.split(", ");
-
-        document.getElementById("service").value = service;
-        clearForm();
-        names.forEach((name, i) => {
-          addNamePhoneInput();
-          document.querySelectorAll("input[name='name']")[i].value = name;
-          document.querySelectorAll("input[name='phone']")[i].value = phoneNumbers[i] || "";
+      handleDelete(id)
+        .then((response) => {
+          if (response.ok) {
+            row.remove();
+            alert("Record deleted successfully.");
+          } else {
+            console.error("Error deleting row:", response.statusText);
+            alert("Error deleting record: " + response.statusText);
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("An error occurred while deleting the record.");
         });
-      } else if (e.target.classList.contains("deleteBtn")) {
-        const id = e.target.closest("tr").dataset.id;
-        handleDelete(id);
-      }
+    }
+  }
+});
+
+// Function to update the database
+function updateDatabase(id, service, names, phoneNumbers) {
+  return fetch(`http://localhost/dashboard/phone-directory/api.php/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ service, names, phone_numbers: phoneNumbers }),
+  });
+}
+
+// Function to add new data
+async function addNewData(service, names, phoneNumbers) {
+  try {
+    const response = await fetch("http://localhost/dashboard/phone-directory/api.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ service, names, phone_numbers: phoneNumbers }),
     });
 
-    // Initialize the page
-    fetchServices();
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${errorData.message || "Unknown error occurred"}`);
+    }
+
     fetchData();
-    addNamePhoneInput();
+    clearForm();
+    return await response.json();
+  } catch (error) {
+    console.error("Error:", error);
+    return { success: false, message: error.message };
+  }
+}
+
+// Function to delete a record
+function handleDelete(id) {
+  return fetch(`http://localhost/dashboard/phone-directory/api.php/${id}`, {
+    method: "DELETE",
+  });
+}
+
+// Function to fetch services for the dropdown
+function fetchServices() {
+  fetch("http://localhost/dashboard/phone-directory/service.php")
+    .then((response) => response.json())
+    .then((data) => {
+      const serviceSelect = document.getElementById("service");
+      serviceSelect.innerHTML = '<option value="">Select a service</option>';
+      data.forEach((service) => {
+        const option = document.createElement("option");
+        option.value = service.name;
+        option.textContent = service.name;
+        serviceSelect.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching services:", error));
+}
+
+// Function to fetch data and populate the table
+function fetchData() {
+  fetch("http://localhost/dashboard/phone-directory/api.php")
+    .then((response) => response.json())
+    .then((data) => {
+      const tableBody = document.getElementById("contactsTableBody");
+      tableBody.innerHTML = "";
+
+      data.forEach((row) => {
+        const { id, service, names, phone_numbers } = row;
+
+        names.forEach((name, index) => {
+          const newRow = document.createElement("tr");
+          newRow.dataset.id = id;
+
+          newRow.innerHTML = `
+            <td>${service}</td>
+            <td>${name}</td>
+            <td>${phone_numbers[index]}</td>
+            <td>
+              <button class="editBtn">Edit</button>
+              <button class="deleteBtn">Delete</button>
+            </td>
+          `;
+          tableBody.appendChild(newRow);
+        });
+      });
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+}
+
+// Initial setup
+fetchServices();
+fetchData();
+addNamePhoneInput();
+
+    
   
