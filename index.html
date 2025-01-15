@@ -10,8 +10,11 @@
     <h1>Phone Directory</h1>
 
     <form id="contactForm">
+      <div id="idContainer" class="input-container">
+        <input type="text" id="id" placeholder="ID" required />
+      </div>
+
       <div id="serviceContainer" class="input-container">
-        <!-- Changed the input to a select dropdown for services -->
         <select id="service" required>
           <option value="">Select a Service</option>
           <!-- Default empty option -->
@@ -33,7 +36,7 @@
     <table>
       <thead>
         <tr>
-           
+          <th>ID</th>
           <th>Service</th>
           <th>Name(s)</th>
           <th>Phone Number(s)</th>
