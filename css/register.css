@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+    text-decoration: none;
+}
+
+body {
+    background-color: #f4f4f4; /* Light background for the entire page */
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container .content {
+    text-align: center;
+}
+
+.container .content h3 {
+    font-size: 30px;
+    color: #333;
+}
+
+.container .content h3 span {
+    background: rgb(79, 252, 139);
+    color: #fff;
+    border-radius: 5px;
+    padding: 0 15px;
+}
+
+.container .content h1 {
+    font-size: 50px;
+    color: #333;
+}
+
+.container .content h1 span {
+    color: crimson;
+}
+
+.container .content p {
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.container .content .btn {
+    display: inline-block;
+    padding: 10px 30px;
+    font-size: 20px;
+    background: #333;
+    color: #fff;
+    margin: 0 5px;
+    text-transform: capitalize;
+    border-radius: 5px; /* Added border radius for buttons */
+}
+
+.container .content .btn:hover {
+    background: rgb(79, 241, 120);
+}
+
+.form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #fff; /* White background for the form */
+    border-radius: 8px; /* Rounded corners for the form */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Softer shadow */
+}
+
+.form-container form {
+    padding: 30px; /* Increased padding for better spacing */
+    border-radius: 5px;
+    width: 100%;
+    max-width: 500px; /* Responsive max width */
+}
+
+.form-container form h3 {
+    font-size: 30px;
+    text-transform: uppercase;
+    margin-bottom: 20px; /* Increased margin for better spacing */
+    color: #333;
+}
+
+.form-container form input,
+.form-container form select {
+    width: 100%;
+    padding: 12px 15px; /* Increased padding for better touch targets */
+    font-size: 17px;
+    margin: 10px 0; /* Increased margin for better spacing */
+    background: #f9f9f9; /* Slightly lighter background for inputs */
+    border: 1px solid #ccc; /* Added border for inputs */
+    border-radius: 5px; /* Rounded corners for inputs */
+    transition: border-color 0.3s; /* Smooth transition for focus */
+}
+
+.form-container form input:focus,
+.form-container form select:focus {
+    border-color: rgb(79, 252, 139); /* Change border color on focus */
+}
+
+.form-container form .form-btn {
+    background: #55f17c;
+    color: #fff;
+    text-transform: capitalize;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 12px; /* Increased padding for better touch targets */
+    border-radius: 5px; /* Rounded corners for buttons */
+    transition: background-color 0.3s; /* Smooth transition for hover */
+}
+
+.form-container form .form-btn:hover {
+    background: rgb(78, 248, 121);
+}
+
+.form-container form p {
+    margin-top: 10px;
+    font-size: 20px;
+    color: #333;
+}
+
+.form-container form p a {
+    color: crimson;
+}
+
+.form-container form .error-msg {
+    margin: 10px 0;
+    display: block;
+    background: crimson;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 20px;
+    padding: 10px;
+}
+
+/* Eye icon styles */
+.password-container {
+    position: relative; /* Position relative for absolute positioning of the icon */
+}
+
+.password-container input {
+    padding-right: 40px; /* Add padding to the right to make space for the icon */
+}
+
+#eye-icon-password,
+#eye-icon-cpassword {
+    position: absolute; /* Position the icon absolutely */
+    right: 10px; /* Adjust the right position */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust for vertical centering */
+    cursor: pointer; /* Change cursor to pointer */
+    color: #333; /* Icon color */
+    font-size: 20px; /* Icon size */
+}

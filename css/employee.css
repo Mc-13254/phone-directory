@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Light background */
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px; /* Space below the header */
+}
+
+
+#logoutButton {
+    background-color: #dc3545; /* Bootstrap danger color for logout */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px 15px; /* Padding for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    display: flex; /* Flexbox for icon and text */
+    align-items: center; /* Center icon and text vertically */
+}
+
+#logoutButton i {
+    margin-right: 5px; /* Space between icon and text */
+}
+
+#logoutButton:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+
+.sort-container {
+    display: flex; /* Flexbox for sorting options */
+    align-items: center; /* Center items vertically */
+}
+
+.sort-container label {
+    margin-right: 10px; /* Space between label and select */
+}
+
+
+
+select {
+    padding: 12px; /* Increased padding for select */
+    border: 1px solid #ccc; /* Border color */
+    border-radius: 4px; /* Rounded corners */
+}
+
+table {
+    width: 80%; /* Full width */
+    margin: 0 auto;
+    border-collapse: collapse; /* Collapse borders */
+    margin-top: 40px; /* Space above the table */
+}
+
+table, th, td {
+    border: 1px solid #ddd; /* Border for table, th, and td */
+}
+
+th {
+    background-color: #4CAF50; /* Green background for header */
+    color: white; /* White text for header */
+    padding: 15px; /* Increased padding for header cells */
+}
+
+td {
+    padding: 15px; /* Increased padding for table cells */
+    text-align: left; /* Align text to the left */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Box shadow for table cells */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+tr:hover td {
+    background-color: #f1f1f1; /* Light gray on row hover */
+}
+
+footer {
+    margin-top: 30px; /* Increased space above footer */
+    text-align: center; /* Center footer text */
+    color: #777; /* Lighter text color */
+    padding: 20px; /* Padding for footer */
+}

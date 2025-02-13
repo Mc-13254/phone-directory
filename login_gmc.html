@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="css/login.css"> <!-- Your CSS file -->
+    <!-- Link to your JavaScript file -->
+</head>
+<body>
+    <div class="form-container">
+        <form id="loginForm">
+            <h3>Login</h3>
+            <input type="text" name="username" required placeholder="Enter your username">
+            <div class="password-container">
+                <input type="password" name="password" required placeholder="Enter your password" id="password">
+                <span id="eye-icon" class="fa fa-eye" onclick="togglePasswordVisibility()" style="cursor: pointer;"></span>
+            </div>
+            <input type="submit" value="Login" class="form-btn">
+            <p>Don't have an account? <a href="register_gmc.html">Register now</a></p>
+        </form>
+    </div>
+
+    <script src="js/login_gmc.js" defer></script> 
+</body>
+</html>

@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9; /* Light background */
+    margin: 0;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px; /* Space below the header */
+}
+
+.container {
+    max-width: 600px; /* Maximum width for the card */
+    margin: 50px auto; /* Center the card */
+    padding: 20px;
+    background-color: white; /* White background for the card */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Box shadow */
+    text-align: center; /* Center text */
+}
+
+h1 {
+    margin-bottom: 20px; /* Space below the heading */
+    color: #333; /* Darker text color */
+}
+
+p {
+    margin-bottom: 20px; /* Space below the paragraph */
+    color: #555; /* Slightly lighter text color */
+}
+
+a {
+    display: inline-block; /* Make links block elements */
+    margin: 10px 0; /* Space around links */
+    padding: 10px 15px; /* Padding for links */
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    text-decoration: none; /* Remove underline */
+    border-radius: 4px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+a:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+footer {
+    margin-top: 20px; /* Space above footer */
+    color: #777; /* Lighter text color */
+    text-align: center; /* Center footer text */
+}
